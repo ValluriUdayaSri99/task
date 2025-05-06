@@ -5,7 +5,7 @@ import Login from './Login';
 import Home from './Home';
 import ProtectedRoute from './ProtectedRoute';
 
-function App() {
+const App: React.FC = () => {
     return (
         <Router>
             <Routes>
@@ -22,6 +22,6 @@ function App() {
             </Routes>
         </Router>
     );
-}
+};
 
 export default App;

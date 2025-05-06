@@ -1,26 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+interface FormData {
+    email: string;
+    password: string;
+}
+
+interface LoginResponse {
+    token: string;
+    user: {
+        [key: string]: any;  // Replace with specific user properties if known
+    };
+}
+
+const Login: React.FC = () => {
+    const [formData, setFormData] = useState<FormData>({ email: '', password: '' });
     const navigate = useNavigate();
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/login', formData);
+            const response = await axios.post<LoginResponse>('http://localhost:3000/login', formData);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
             alert('Login successful!');
             navigate('/home');
         } catch (error) {
-            alert(error.response.data.message || 'Login failed');
+            if (axios.isAxiosError(error) && error.response) {
+                alert(error.response.data.message || 'Login failed');
+            } else {
+                alert('Login failed');
+            }
         }
     };
 
@@ -32,6 +48,6 @@ function Login() {
             <button type="submit">Login</button>
         </form>
     );
-}
+};
 
 export default Login;

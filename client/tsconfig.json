@@ -22,8 +22,8 @@
     "noUncheckedSideEffectImports": true,
 
     /* JSX */
-    "jsx": "react-jsx",
-    "jsxImportSource": "react"
+    "jsx": "react-jsx", // Enables JSX support
+    "jsxImportSource": "react" // Required for React 17+ with JSX
   },
   "include": ["src"]
 }

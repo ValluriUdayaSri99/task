@@ -5,9 +5,16 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true },
@@ -42,7 +49,6 @@ const upload = multer({
     }
 });
 
-
 app.post('/register', upload.single('image'), async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -66,7 +72,6 @@ app.post('/register', upload.single('image'), async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
 
 app.post('/login', async (req, res) => {
     try {
@@ -117,4 +122,3 @@ connectdb();
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
-
